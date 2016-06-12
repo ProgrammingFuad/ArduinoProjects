@@ -1,0 +1,42 @@
+Method A
+
+digitalWrite (11, High);
+digitalWrite (11, LOW);
+
+Sketch Size: 3,936 bytes
+
+Method B
+
+PORTB = PORTB | 0x08; 
+PORTB = PORTB & 0xF7; 
+
+Sketch Size: 3,318
+
+Method C
+
+"sbi 0x05, 11” 
+"cbi 0x05, 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ”
+
+Sketch Size: 3910
+
+
+Method D
+
+asm volatile(
+"move r16, %1 \n\t"
+"ori r16, 0x05 \n\t"
+"mov  %0, r16 n\t"
+:"=r" (PORTB)
+: "r" (PORTB)
+);
+
+
+asm volatile(
+"mov r16, %1 \n\t"
+"andi r16, 0xFA \n\t"
+"mov %0, r16 \n\t"
+:"=r" (PORTB)
+:"r" (PORTB)
+);
+
+Sketch size: 3880 bytes

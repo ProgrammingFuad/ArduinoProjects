@@ -1,0 +1,121 @@
+# First get the inputs
+	IN
+	STO	a
+	IN	
+	STO	b
+	IN	
+	STO	c
+# Check a < c
+	SUB	a
+	BRP	b-check
+# if not swap a and c
+	LDA	a
+	STO	d
+	LDA	c
+	STO	a
+	LDA	d
+	STO	c
+# Check b < c
+b-check	LDA	c
+	SUB	b
+	BRP	csize
+# if not swap b and c
+	LDA	b
+	STO	d
+	LDA	c
+	STO	b
+	LDA	d
+	STO	c
+# Check c will not overflow on squaring
+# i.e. c < 32 so c^2 < 999
+# Since c is the largest, 
+# we do not need to check a, b as well
+csize	LDA	c
+	SUB	thirtytwo
+	BRP	fail
+# Now square a:
+# set counter to a
+# add a to d for counter number of times
+# (first reset d to zero so can run again)
+# (also if zero skip the squaring to avoid
+# a loop over 999 additions - it is common 
+# error to have loops go wrong on input 0 or 1)
+sq-a	LDA	zero
+	STO	d
+	LDA	a
+	BRZ	sq-b
+	STO	counter
+next-a	LDA	d
+	ADD	a
+	STO	d
+	LDA	counter
+	SUB	one
+	BRZ	sq-b
+	STO	counter
+	BR	next-a
+# Store d back in a, so a now holds a^2
+sq-b	LDA	d
+	STO	a
+# Now square b the same way
+	LDA	zero
+	STO	d
+	LDA	b
+	BRZ	sq-c
+	STO	counter
+next-b	LDA	d
+	ADD	b
+	STO	d
+	LDA	counter
+	SUB	one
+	BRZ	sq-c
+	STO	counter
+	BR	next-b
+# Store b^2 in b
+# And now square c
+sq-c	LDA	d
+	STO	b
+	LDA	zero
+	STO	d
+	LDA	c
+	BRZ	pycheck
+	STO	counter
+next-c	LDA	d
+	ADD	c
+	STO	d
+	LDA	counter
+	SUB	one
+	BRZ	storec
+	STO	counter
+	BR	next-c
+# Store c^2 back in c
+storec	LDA	d
+	STO	c
+# Since c was the largest, we know a^2 < 999
+# and b^2 < 999
+# Now check that c^2-a^2-b^2 = 0
+# Checking this way avoids potential
+# overflow on a^2+b^2
+pycheck	LDA	c
+	SUB	a
+	SUB	b
+	BRZ	yes
+# Three different endings: no, yes and fail
+# Note: I saved two lines by branching to end
+# rather than repeating OUT, HLT three times
+# I also saved one line by using HLT as a zero
+# constant to reset variables.
+no	LDA	zero
+	BR	end
+yes	LDA	one
+	BR	end
+fail	LDA	two
+end	OUT
+zero	HLT
+a	DAT
+b	DAT
+c	DAT
+d	DAT
+counter	DAT
+one	DAT	001
+two	DAT	002
+thirtytwo	DAT	032

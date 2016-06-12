@@ -1,0 +1,27 @@
+# Enter assembler code here
+#
+# To add comments begin lines with #
+# Code lines have 3 entries separated by tabs
+# > First an optional label,
+# > second an instruction mnemonic, and 
+# > third an address label if required.
+#
+# Valid mnemonics are:
+# HLT, ADD, SUB, STO, LDA,
+# BR, BRZ, BRP, IN, OUT, DAT
+top	LDA	n
+	OUT
+	ADD	i
+	STO	n
+	LDA	count
+	SUB	one
+	STO	count
+	BRP	top
+	HLT
+n	DAT	1
+i	DAT	2
+count	DAT	49
+one	DAT	1
+
+
+
