@@ -1,9 +1,5 @@
 /*
-      1/27/2015
-      I copied this sketch from http://linksprite.com/wiki/index.php5?title=16_X_2_LCD_Keypad_Shield_for_Arduino
-      Use it to test your Arduino and LCD keypad
-      Make sure all buttons work!
-      Kevin
+     Fuad Mohamoud
 */
 
 
